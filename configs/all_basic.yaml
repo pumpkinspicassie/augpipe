@@ -1,0 +1,24 @@
+mode: random
+pipeline:
+  - Rotate:
+      angle: 8
+  - Scale:
+      min_factor: 0.5
+      max_factor: 1.15
+  - Translate:
+      x: 3
+      y: 2
+  - Distortion:
+      amp: 2.5
+      sigma: 20.0
+  - BlurDamage:
+      kernel: 5
+      sigma: 1.5
+  - WhiteDropDamage:
+      drop_length: 3
+      drop_width: 3
+  - BlackDropDamage:
+      num_drops: 15
+      min_len: 2
+      max_len: 5
+      thickness: 1
