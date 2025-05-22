@@ -37,9 +37,10 @@ augpipe/
 ## Installation
 
 ```bash
-git clone -b development https://github.com/gavcarp/DLP-2025.git
-cd DLP-2025/Task_1/Augmentation/augpipe
+git clone https://github.com/pumpkinspicassie/augpipe.git
+cd augpipe
 pip install -e .
+
 ```
 
 ---
@@ -48,13 +49,7 @@ pip install -e .
 
 After installation:
 
-```bash
-python split.py
-python preprocess.py         # general augmentation strategy
-# or
-python class_aware_aug.py    # class aware augmentation strategy
-
-```
+try example scripts 
 
 ---
 
