@@ -27,9 +27,10 @@ def load_pipeline_from_yaml(yaml_path):
         if isinstance(step, dict):
             for name, params in step.items():
                 if name in TRANSFORM_REGISTRY:
-                    return TRANSFORM_REGISTRY[name](**params)
+                    return TRANSFORM_REGISTRY[name](mode=mode, **params)
                 elif name == "OneOf":
-                    return OneOfTransform([parse_transform(s) for s in params], mode=mode)
+                    sub_transforms = [parse_transform(s) for s in params]
+                    return OneOfTransform(sub_transforms, mode=mode)
                 elif name == "Sometimes":
                     p = params["p"]
                     inner = parse_transform(params["transform"])

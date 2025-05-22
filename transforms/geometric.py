@@ -1,6 +1,4 @@
-import cv2
-import numpy as np
-import random
+
 import cv2
 import numpy as np
 import random
@@ -10,14 +8,24 @@ class Rotate(BaseTransform):
         super().__init__(mode)
         self.angle = angle
 
-    def __call__(self, img):
+    def __call__(self, img, mask=None):
         h, w = img.shape[:2]
+
         if self.mode == 'random':
             angle = random.uniform(-self.angle, self.angle)
         else:
             angle = self.angle
+
         M = cv2.getRotationMatrix2D((w // 2, h // 2), angle, 1)
-        return cv2.warpAffine(img, M, (w, h), borderValue=255)
+
+        img_rotated = cv2.warpAffine(img, M, (w, h), borderValue=255)
+
+        if mask is not None:
+            # Note: use nearest neighbor for masks to avoid interpolation artifacts
+            mask_rotated = cv2.warpAffine(mask, M, (w, h), flags=cv2.INTER_NEAREST, borderValue=0)
+            return img_rotated, mask_rotated
+
+        return img_rotated
 
 
 class Translate(BaseTransform):
@@ -26,7 +34,7 @@ class Translate(BaseTransform):
         self.x = x
         self.y = y
 
-    def __call__(self, img):
+    def __call__(self, img, mask=None):
         h, w = img.shape[:2]
 
         if self.mode == 'random':
@@ -37,7 +45,15 @@ class Translate(BaseTransform):
             ty = self.y
 
         M = np.float32([[1, 0, tx], [0, 1, ty]])
-        return cv2.warpAffine(img, M, (w, h), borderValue=255)
+
+        img_translated = cv2.warpAffine(img, M, (w, h), borderValue=255)
+
+        if mask is not None:
+            mask_translated = cv2.warpAffine(mask, M, (w, h), flags=cv2.INTER_NEAREST, borderValue=0)
+            return img_translated, mask_translated
+
+        return img_translated
+
 
 class Scale(BaseTransform):
     def __init__(self, min_factor=0.9, max_factor=1.1, mode='random'):
@@ -45,31 +61,30 @@ class Scale(BaseTransform):
         self.min_factor = min_factor
         self.max_factor = max_factor
 
-    def __call__(self, img):
+    def __call__(self, img, mask=None):
         if img is None:
             raise ValueError("Input image is None")
-        
+
         h, w = img.shape[:2]
 
-        # 选择缩放比例
+        # Choose scaling factor
         if self.mode == 'random':
             scale = random.uniform(self.min_factor, self.max_factor)
         else:
             scale = (self.min_factor + self.max_factor) / 2
 
-        # 缩放图像
+        # Resize image
         new_w = int(w * scale)
         new_h = int(h * scale)
-        resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
+        img_resized = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
 
-        # 生成 canvas
-        canvas = np.full((h, w), 255, dtype=np.uint8)
+        # Create canvas for image
+        img_canvas = np.full((h, w), 255, dtype=np.uint8)
 
-        # 计算偏移与裁剪
+        # Compute placement
         offset_x = (w - new_w) // 2
         offset_y = (h - new_h) // 2
 
-        # 计算放入 canvas 的范围（确保不会越界）
         src_x1 = max(0, -offset_x)
         src_y1 = max(0, -offset_y)
         dst_x1 = max(0, offset_x)
@@ -78,8 +93,15 @@ class Scale(BaseTransform):
         src_x2 = min(new_w, w - dst_x1 + src_x1)
         src_y2 = min(new_h, h - dst_y1 + src_y1)
 
-        # 粘贴图像到 canvas（可居中、可裁剪）
-        canvas[dst_y1:dst_y1 + (src_y2 - src_y1), dst_x1:dst_x1 + (src_x2 - src_x1)] = \
-            resized[src_y1:src_y2, src_x1:src_x2]
+        img_canvas[dst_y1:dst_y1 + (src_y2 - src_y1), dst_x1:dst_x1 + (src_x2 - src_x1)] = \
+            img_resized[src_y1:src_y2, src_x1:src_x2]
 
-        return canvas
+        # Process mask if provided
+        if mask is not None:
+            mask_resized = cv2.resize(mask, (new_w, new_h), interpolation=cv2.INTER_NEAREST)
+            mask_canvas = np.full((h, w), 0, dtype=mask.dtype)  # background label = 0
+            mask_canvas[dst_y1:dst_y1 + (src_y2 - src_y1), dst_x1:dst_x1 + (src_x2 - src_x1)] = \
+                mask_resized[src_y1:src_y2, src_x1:src_x2]
+            return img_canvas, mask_canvas
+
+        return img_canvas

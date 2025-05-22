@@ -1,0 +1,12 @@
+setup.py
+augpipe.egg-info/PKG-INFO
+augpipe.egg-info/SOURCES.txt
+augpipe.egg-info/dependency_links.txt
+augpipe.egg-info/requires.txt
+augpipe.egg-info/top_level.txt
+transforms/__init__.py
+transforms/base.py
+transforms/compose.py
+transforms/damage.py
+transforms/distortion.py
+transforms/geometric.py
