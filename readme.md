@@ -97,3 +97,6 @@ pipeline:
 - [OpenCV](https://opencv.org/)
 - [Hydra / OmegaConf](https://hydra.cc/)
 - [imagemorph.c](https://github.com/GrHound/imagemorph.c)
+
+## Author:
+https://github.com/pumpkinspicassie
