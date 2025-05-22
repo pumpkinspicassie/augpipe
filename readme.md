@@ -1,7 +1,7 @@
 # augpipe
 
 ---
-We design this python library sepcicifally for history document recognition tasks.
+I design this python library sepcicifally for history document recognition tasks.
 In the deadsea scoll recognition task, we use the augmentation algorithm in preprocess.py.
 
 ## Functions
