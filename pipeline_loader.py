@@ -3,8 +3,8 @@ from transforms.geometric import Rotate, Scale, Translate
 from transforms.damage import BlackDropDamage, WhiteDropDamage, BlurDamage
 from transforms.distortion import Distortion
 from transforms.compose import ComposeTransform, OneOfTransform, SometimesTransform
+from transforms.photometric import GaussianNoise
 
-# 注册表，统一管理所有增强模块
 TRANSFORM_REGISTRY = {
     "Rotate": Rotate,
     "Scale": Scale,
@@ -13,6 +13,7 @@ TRANSFORM_REGISTRY = {
     "BlackDropDamage": BlackDropDamage,
     "WhiteDropDamage": WhiteDropDamage,
     "BlurDamage": BlurDamage,
+    "GaussianNoise":GaussianNoise,
 }
 
 def load_pipeline_from_yaml(yaml_path):
