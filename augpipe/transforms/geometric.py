@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import random
-from transforms.base import BaseTransform
+from .base import BaseTransform
 class Rotate(BaseTransform):
     def __init__(self, angle=0, mode='random'):
         super().__init__(mode)

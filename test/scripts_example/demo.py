@@ -1,10 +1,11 @@
 import yaml
 import os
-from utils import load_image, save_image
-from pipeline_loader import TRANSFORM_REGISTRY
 import glob
-from pipeline_loader import load_pipeline_from_yaml
 
+from augpipe.utils import load_image, save_image
+from augpipe.pipeline_loader import load_pipeline_from_yaml
+from augpipe.transforms.compose import ComposeTransform
+from augpipe.transforms import TRANSFORM_REGISTRY
 
 def apply_each_transform(yaml_path, mode, out_dir, img):
     with open(yaml_path, 'r') as f:
@@ -35,19 +36,20 @@ def apply_and_save(yaml_path, mode, out_dir, img):
     print(f"[✓] Saved full pipeline output: {save_path}")
 
 # === Paths
-yaml_path = "../configs/all_basic.yaml"
-output_random = "../testoutput/demo_output_random"
-output_fixed = "../testoutput/demo_output_fixed"
+yaml_path = "scripts_example/all_basic.yaml"
+output_random = "./testoutput/demo_output_random"
+output_fixed = "./testoutput/demo_output_fixed"
 os.makedirs(output_random, exist_ok=True)
 os.makedirs(output_fixed, exist_ok=True)
-folder_path = "../../../Data/monkbrill_cleaned/Alef"
-image_list = sorted(glob.glob(os.path.join(folder_path, "*.png")))
+#folder_path = "../../../Data/monkbrill_cleaned/Alef"
+#image_list = sorted(glob.glob(os.path.join(folder_path, "*.png")))
 
-if not image_list:
-    print(f"[ERROR] No PNG images found in {folder_path}")
-    exit(1)
 
-img_path = image_list[0]  # 取第一张图像作为样例
+#if not image_list:
+#    print(f"[ERROR] No PNG images found in {folder_path}")
+#    exit(1)
+
+img_path = "navis-QIrug-Qumran_extr09_0001-line-008-y1=400-y2=515-zone-HUMAN-x=1650-y=0049-w=0035-h=0042-ybas=0027-nink=631-segm=COCOS5cocos_aug_3.png"
 print(f"[INFO] Using image: {img_path}")
 
 # === Load image

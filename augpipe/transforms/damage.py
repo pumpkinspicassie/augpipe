@@ -4,7 +4,7 @@ import random
 import cv2
 import numpy as np
 import albumentations as A
-from transforms.base import BaseTransform
+from .base import BaseTransform
 
 class BlackDropDamage(BaseTransform):
     def __init__(self, num_drops=5, min_len=5, max_len=15, thickness=2, mode='random'):

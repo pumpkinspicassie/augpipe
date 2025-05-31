@@ -1,4 +1,4 @@
-# augpipe
+# augpipe 0.2 version
 
 ---
 I design this python library sepcicifally for history document recognition tasks.
@@ -49,7 +49,7 @@ pip install -e .
 
 After installation:
 
-try example scripts 
+try demo.py in example scripts 
 
 ---
 

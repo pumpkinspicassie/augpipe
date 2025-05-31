@@ -1,20 +1,10 @@
 import yaml
-from transforms.geometric import Rotate, Scale, Translate
-from transforms.damage import BlackDropDamage, WhiteDropDamage, BlurDamage
-from transforms.distortion import Distortion
-from transforms.compose import ComposeTransform, OneOfTransform, SometimesTransform
-from transforms.photometric import GaussianNoise
+from .transforms.geometric import Rotate, Scale, Translate
+from .transforms.damage import BlackDropDamage, WhiteDropDamage, BlurDamage
+from .transforms.distortion import Distortion
+from .transforms.compose import ComposeTransform, OneOfTransform, SometimesTransform
+from .transforms import TRANSFORM_REGISTRY
 
-TRANSFORM_REGISTRY = {
-    "Rotate": Rotate,
-    "Scale": Scale,
-    "Translate": Translate,
-    "Distortion": Distortion,
-    "BlackDropDamage": BlackDropDamage,
-    "WhiteDropDamage": WhiteDropDamage,
-    "BlurDamage": BlurDamage,
-    "GaussianNoise":GaussianNoise,
-}
 
 def load_pipeline_from_yaml(yaml_path):
     with open(yaml_path, 'r') as f:

@@ -7,7 +7,7 @@ import math
 import random
 import numpy as np
 import cv2
-from transforms.base import BaseTransform
+from .base import BaseTransform
 
 class Distortion(BaseTransform):
     def __init__(self, amp=2.0, sigma=30.0, mode='random'):
